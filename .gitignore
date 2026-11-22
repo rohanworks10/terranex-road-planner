@@ -1,0 +1,22 @@
+# Secrets (API keys and passwords)
+.env
+.env.*
+!.env.example
+
+# Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Frontend
+node_modules/
+dist/
+
+# Downloaded elevation and terrain files (the app can recreate these)
+backend/data/
+
+# Editor and Windows files
+.vscode/
+Thumbs.db

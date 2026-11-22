@@ -1,0 +1,6 @@
+fastapi
+httpx
+numpy
+pytest
+rasterio
+uvicorn
