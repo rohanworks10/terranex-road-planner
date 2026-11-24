@@ -1,6 +1,6 @@
 import logging
 
-from fastapi import FastAPI, HTTPException
+from fastapi import APIRouter, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from dem import (
@@ -15,6 +15,7 @@ from terrain import slope_degrees_to_percent, slope_profile
 from config import SLOPE_TOLERANCE_DEGREES
 
 app = FastAPI(title="Road Corridor Planner API")
+api = APIRouter(prefix="/api")
 logger = logging.getLogger(__name__)
 
 # Allow the React dev page (running on port 5173) to call this API.
@@ -31,12 +32,12 @@ def home():
     return {"message": "Road Corridor Planner API is running"}
 
 
-@app.get("/health")
+@api.get("/health")
 def health():
     return {"status": "ok"}
 
 
-@app.post("/plan")
+@api.post("/plan")
 def plan(request: RouteRequest):
     """
     Receive start, end and a user-supplied slope.
@@ -99,7 +100,7 @@ def plan(request: RouteRequest):
     }
 
 
-@app.post("/terrain/prepare")
+@api.post("/terrain/prepare")
 def prepare_terrain_endpoint(request: StudyAreaRequest):
     """Create a buffered, request-specific DEM and terrain-cost grid."""
     start = (request.start.lat, request.start.lon)
@@ -113,7 +114,7 @@ def prepare_terrain_endpoint(request: StudyAreaRequest):
         raise HTTPException(status_code=503, detail=str(exc)) from exc
 
 
-@app.post("/routes")
+@api.post("/routes")
 def generate_routes_endpoint(request: RouteGenerationRequest):
     """Generate two routes from an already prepared terrain grid."""
     start = (request.start.lat, request.start.lon)
@@ -134,3 +135,6 @@ def generate_routes_endpoint(request: RouteGenerationRequest):
         raise HTTPException(status_code=422, detail=str(exc)) from exc
     except DemDataError as exc:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
+
+
+app.include_router(api)

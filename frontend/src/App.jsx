@@ -36,7 +36,7 @@ function App() {
   // Backend health status (top of page)
   const [status, setStatus] = useState('Checking...')
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/health')
+    fetch('/api/health')
       .then(r => r.json())
       .then(d => setStatus(d.status))
       .catch(() => setStatus('Cannot reach the backend'))
@@ -70,7 +70,7 @@ function App() {
     setError(null)
     setLoading(true)
 
-    fetch('http://127.0.0.1:8000/plan', {
+    fetch('/api/plan', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -120,7 +120,7 @@ function App() {
     }
 
     setPreparingTerrain(true)
-    fetch('http://127.0.0.1:8000/terrain/prepare', {
+    fetch('/api/terrain/prepare', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -155,7 +155,7 @@ function App() {
     }
 
     setRouteLoading(true)
-    fetch('http://127.0.0.1:8000/routes', {
+    fetch('/api/routes', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

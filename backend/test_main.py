@@ -11,12 +11,12 @@ def test_home():
 
 
 def test_health():
-    response = client.get("/health")
+    response = client.get("/api/health")
     assert response.status_code == 200
     assert response.json()["status"] == "ok"
 
 
 
 def test_cors_allows_react_page():
-    response = client.get("/health", headers={"Origin": "http://localhost:5173"})
+    response = client.get("/api/health", headers={"Origin": "http://localhost:5173"})
     assert response.headers["access-control-allow-origin"] == "http://localhost:5173"
