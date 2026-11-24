@@ -2,10 +2,9 @@
 
 > **Give it two points and a hill slope. Get back two feasible road corridors, and a clear explanation of the trade-offs between them.**
 
-**Team:** TerraNex (2 members) · **Track:** Agents · **Hackathon build:** 21 Nov – 6 Dec 2026
+**Team:** TerraNex
 
 🎥 **Demo video:** `ADD LINK HERE`  
-🖼️ **Screenshots:** see [Terrain Analysis]("C:\Users\Rohan\OneDrive\Pictures\Screenshots\Screenshot 2026-11-24 193535.png")
 
 ---
 
@@ -57,6 +56,12 @@ Every output is meant to separate **observed data**, **calculated values**, **mo
 | Rivers, roads and crossings from OpenStreetMap | 🔜 Planned |
 | Reference library + drainage/material guidance with citations | 🔜 Planned |
 | AI explanation layer | 🔜 Planned |
+| Land cover screening (ESA WorldCover) | 🔜 Planned |
+| Soil context screening (ISRIC SoilGrids) | 🔜 Planned |
+| Future climate projections (long-term resilience lens) | 🔜 Planned |
+| Route scoring with transparent, adjustable weights | 🔜 Planned |
+| Confidence and data-quality warnings per route | 🔜 Planned |
+| Exportable route comparison report | 🔜 Planned |
 
 > We list what is **not** done yet on purpose. Claiming only what is verified is part of how this project is designed.
 
@@ -122,12 +127,6 @@ Enter a start and destination in a hilly area, plus an estimated average slope i
 cd backend
 pytest
 ```
-
-## 📸 Screenshots
-
-`ADD: input form`  
-`ADD: terrain result with slope-mismatch warning`  
-`ADD: Route A vs Route B on the map`
 
 ## ⚠️ Limitations (what TerraNex does *not* claim)
 
