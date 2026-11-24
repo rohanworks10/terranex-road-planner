@@ -22,7 +22,7 @@ def test_terrain_prepare_endpoint_returns_area_and_dataset_metadata(monkeypatch)
         return expected
 
     monkeypatch.setattr(main, "prepare_terrain", fake_prepare)
-    response = client.post("/terrain/prepare", json={
+    response = client.post("/api/terrain/prepare", json={
         "start": {"lat": 20.1, "lon": 10.1},
         "end": {"lat": 20.9, "lon": 10.9},
         "buffer_m": 1200,
@@ -38,7 +38,7 @@ def test_terrain_prepare_endpoint_returns_area_and_dataset_metadata(monkeypatch)
 
 
 def test_terrain_prepare_endpoint_validates_coordinates():
-    response = client.post("/terrain/prepare", json={
+    response = client.post("/api/terrain/prepare", json={
         "start": {"lat": 91, "lon": 10},
         "end": {"lat": 20, "lon": 11},
     })
@@ -50,7 +50,7 @@ def test_terrain_prepare_endpoint_reports_missing_dem_data(monkeypatch):
         raise DemDataError("No public DEM tile is available for this area.")
 
     monkeypatch.setattr(main, "prepare_terrain", missing_data)
-    response = client.post("/terrain/prepare", json={
+    response = client.post("/api/terrain/prepare", json={
         "start": {"lat": 20.1, "lon": 10.1},
         "end": {"lat": 20.9, "lon": 10.9},
     })

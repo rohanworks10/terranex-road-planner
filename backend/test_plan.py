@@ -39,7 +39,7 @@ FAKE_TERRAIN = {
 def test_plan_accepts_valid_input(monkeypatch):
     """The endpoint returns 200 and status ok for valid input."""
     monkeypatch.setattr(main, "slope_profile", lambda start, end: FAKE_TERRAIN)
-    response = client.post("/plan", json={
+    response = client.post("/api/plan", json={
         "start": {"lat": 15.85, "lon": 74.50},
         "end":   {"lat": 15.60, "lon": 74.30},
         "endpoint_slope_degrees": 5.0,
@@ -50,7 +50,7 @@ def test_plan_accepts_valid_input(monkeypatch):
 
 def test_plan_rejects_bad_slope():
     """Schema validation rejects slope >= 90 degrees before terrain is called."""
-    response = client.post("/plan", json={
+    response = client.post("/api/plan", json={
         "start": {"lat": 15.85, "lon": 74.50},
         "end":   {"lat": 15.60, "lon": 74.30},
         "average_slope_degrees": 120,
@@ -60,7 +60,7 @@ def test_plan_rejects_bad_slope():
 
 def test_plan_rejects_bad_latitude():
     """Schema validation rejects latitude > 90."""
-    response = client.post("/plan", json={
+    response = client.post("/api/plan", json={
         "start": {"lat": 200, "lon": 74.50},
         "end":   {"lat": 15.60, "lon": 74.30},
         "average_slope_degrees": 12,
@@ -75,7 +75,7 @@ def test_plan_rejects_bad_latitude():
 def test_plan_returns_distance(monkeypatch):
     """Response includes the terrain distance in metres."""
     monkeypatch.setattr(main, "slope_profile", lambda start, end: FAKE_TERRAIN)
-    response = client.post("/plan", json={
+    response = client.post("/api/plan", json={
         "start": {"lat": 15.85, "lon": 74.50},
         "end":   {"lat": 15.60, "lon": 74.30},
         "average_slope_degrees": 5.0,
@@ -86,7 +86,7 @@ def test_plan_returns_distance(monkeypatch):
 def test_plan_returns_calculated_slope(monkeypatch):
     """Response includes the slope that was calculated from elevation data."""
     monkeypatch.setattr(main, "slope_profile", lambda start, end: FAKE_TERRAIN)
-    response = client.post("/plan", json={
+    response = client.post("/api/plan", json={
         "start": {"lat": 15.85, "lon": 74.50},
         "end":   {"lat": 15.60, "lon": 74.30},
         "average_slope_degrees": 5.0,
@@ -108,7 +108,7 @@ def test_plan_returns_calculated_slope(monkeypatch):
 def test_no_warning_when_slopes_match(monkeypatch):
     """No warning when user slope equals calculated slope."""
     monkeypatch.setattr(main, "slope_profile", lambda start, end: FAKE_TERRAIN)
-    response = client.post("/plan", json={
+    response = client.post("/api/plan", json={
         "start": {"lat": 15.85, "lon": 74.50},
         "end":   {"lat": 15.60, "lon": 74.30},
         "average_slope_degrees": 5.0,   # same as FAKE_TERRAIN
@@ -124,7 +124,7 @@ def test_warning_compares_endpoint_not_segment_average(monkeypatch):
         "average_absolute_segment_slope_degrees": 20.0,
     }
     monkeypatch.setattr(main, "slope_profile", lambda start, end: terrain_result)
-    response = client.post("/plan", json={
+    response = client.post("/api/plan", json={
         "start": {"lat": 15.85, "lon": 74.50},
         "end":   {"lat": 15.60, "lon": 74.30},
         "endpoint_slope_degrees": 5.0,
@@ -135,7 +135,7 @@ def test_warning_compares_endpoint_not_segment_average(monkeypatch):
 def test_no_warning_when_difference_is_within_tolerance(monkeypatch):
     """No warning when the difference is less than 5.0 degrees."""
     monkeypatch.setattr(main, "slope_profile", lambda start, end: FAKE_TERRAIN)
-    response = client.post("/plan", json={
+    response = client.post("/api/plan", json={
         "start": {"lat": 15.85, "lon": 74.50},
         "end":   {"lat": 15.60, "lon": 74.30},
         "average_slope_degrees": 8.9,   # differs by 3.9 degrees — within 5.0
@@ -148,7 +148,7 @@ def test_no_warning_when_difference_is_within_tolerance(monkeypatch):
 def test_warning_when_difference_exceeds_tolerance(monkeypatch):
     """Warning is True when user slope differs from calculated slope by > 5.0 degrees."""
     monkeypatch.setattr(main, "slope_profile", lambda start, end: FAKE_TERRAIN)
-    response = client.post("/plan", json={
+    response = client.post("/api/plan", json={
         "start": {"lat": 15.85, "lon": 74.50},
         "end":   {"lat": 15.60, "lon": 74.30},
         "average_slope_degrees": 15.0,  # differs by 10.0 degrees — over tolerance
@@ -161,7 +161,7 @@ def test_warning_when_difference_exceeds_tolerance(monkeypatch):
 def test_slope_difference_is_always_positive(monkeypatch):
     """The difference is always positive regardless of which is larger."""
     monkeypatch.setattr(main, "slope_profile", lambda start, end: FAKE_TERRAIN)
-    response = client.post("/plan", json={
+    response = client.post("/api/plan", json={
         "start": {"lat": 15.85, "lon": 74.50},
         "end":   {"lat": 15.60, "lon": 74.30},
         "average_slope_degrees": 1.0,   # user gave a smaller value
@@ -178,7 +178,7 @@ def test_warning_uses_unrounded_endpoint_measurement(monkeypatch):
         "endpoint_slope_degrees": 5.04,
     }
     monkeypatch.setattr(main, "slope_profile", lambda start, end: terrain_result)
-    response = client.post("/plan", json={
+    response = client.post("/api/plan", json={
         "start": {"lat": 15.85, "lon": 74.50},
         "end":   {"lat": 15.60, "lon": 74.30},
         "endpoint_slope_degrees": 10.02,
@@ -191,7 +191,7 @@ def test_warning_uses_unrounded_endpoint_measurement(monkeypatch):
 def test_response_includes_tolerance_value(monkeypatch):
     """The tolerance used is returned so the frontend can show it."""
     monkeypatch.setattr(main, "slope_profile", lambda start, end: FAKE_TERRAIN)
-    response = client.post("/plan", json={
+    response = client.post("/api/plan", json={
         "start": {"lat": 15.85, "lon": 74.50},
         "end":   {"lat": 15.60, "lon": 74.30},
         "average_slope_degrees": 5.0,
@@ -208,7 +208,7 @@ def test_same_start_and_end_returns_error(monkeypatch):
     def raise_value_error(start, end):
         raise ValueError("Start and end are the same place.")
     monkeypatch.setattr(main, "slope_profile", raise_value_error)
-    response = client.post("/plan", json={
+    response = client.post("/api/plan", json={
         "start": {"lat": 15.85, "lon": 74.50},
         "end":   {"lat": 15.85, "lon": 74.50},
         "average_slope_degrees": 5.0,
@@ -224,7 +224,7 @@ def test_elevation_api_failure_returns_error(monkeypatch):
     def raise_network_error(start, end):
         raise Exception("Connection timed out")
     monkeypatch.setattr(main, "slope_profile", raise_network_error)
-    response = client.post("/plan", json={
+    response = client.post("/api/plan", json={
         "start": {"lat": 15.85, "lon": 74.50},
         "end":   {"lat": 15.60, "lon": 74.30},
         "average_slope_degrees": 5.0,

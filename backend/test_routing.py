@@ -187,7 +187,7 @@ def test_route_endpoint_uses_cached_grid_and_returns_geojson(raster_factory, mon
     end = raster_factory[1](5, 10)
 
     response = client.post(
-        "/routes",
+        "/api/routes",
         json={
             "start": {"lat": start[0], "lon": start[1]},
             "end": {"lat": end[0], "lon": end[1]},
@@ -211,7 +211,7 @@ def test_route_endpoint_reports_missing_cached_grid(raster_factory, monkeypatch)
     end = raster_factory[1](5, 10)
 
     response = client.post(
-        "/routes",
+        "/api/routes",
         json={
             "start": {"lat": start[0], "lon": start[1]},
             "end": {"lat": end[0], "lon": end[1]},
