@@ -159,5 +159,6 @@ pytest
 
 ## 👥 Team TerraNex
 
-- **Rohan** ([@rohanworks10](https://github.com/rohanworks10)): Team captain
-- **Atharv**: Team member
+- **Atharv**: Team captain
+- **Rohan** ([@rohanworks10](https://github.com/rohanworks10)): Team member
+
