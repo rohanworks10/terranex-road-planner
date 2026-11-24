@@ -4,7 +4,7 @@
 
 **Team:** TerraNex
 
-🎥 **Demo video:** `ADD LINK HERE`  
+🎥 **Demo video:** `https://youtu.be/eZMPhANlD1k`  
 
 ---
 
